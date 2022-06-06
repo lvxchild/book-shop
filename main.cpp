@@ -1,12 +1,31 @@
 #include <iostream>
 #include <string>
+#include <sqlite3.h>
 
 using namespace std;
 
+/*
+Roles:
+1 => ADMIN
+2 => MANAGER
+3 => COSTUMER
+*/
+
 int main() {
     string name, password;
-    int tries = 0;
+    int tries = 0, role, rc;
     bool correct_login = false;
+    sqlite3 *db;
+
+    rc = sqlite3_open("shop.db", &db);
+    if (rc) {
+        fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(db));
+        return 0;
+    }
+    else {
+        fprintf(stderr, "Database opened successfully.\n");
+    }
+
 
     while(tries<=5 || correct_login==false) {
         cout << "Name: ";
@@ -25,6 +44,21 @@ int main() {
     }
 
     cout << "Hello " + name + "\nWhat do you want to do?\n";
+    if (role == 1)
+    {
+        admin();
+    }
+    else if (role == 2)
+    {
+        manager();
+    }
+    else if (role == 3)
+    {
+        costumer();
+    }
+    
+    
+    
     return 0;
 }
 
